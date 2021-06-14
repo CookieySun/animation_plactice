@@ -1,19 +1,26 @@
+import 'package:animation_plactice/second.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 /// This is the main application widget.
-class ThirdApp extends StatelessWidget {
-  const ThirdApp({Key? key}) : super(key: key);
-
-  static const String _title = 'Flutter Code Sample';
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
-    );
-  }
-}
+// class ThirdApp extends StatelessWidget {
+//   const ThirdApp({Key? key}) : super(key: key);
+//
+//   static const String _title = 'Flutter Code Sample';
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: _title,
+//       home: MyStatefulWidget(),
+//       routes: {
+//         "/MyApp": (BuildContext context) => MyApp(),
+//         "/LogoApp": (BuildContext context) => LogoApp(),
+//       },
+//     );
+//   }
+// }
 
 /// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
@@ -52,6 +59,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
         child: const Center(
           child: FlutterLogo(size: 200.0),
         ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed("/MyApp");
+            },
+            child: Icon(Icons.arrow_left),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed("/LogoApp");
+            },
+            child: Icon(Icons.arrow_right),
+          ),
+        ],
       ),
     );
   }

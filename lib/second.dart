@@ -1,4 +1,7 @@
+import 'package:animation_plactice/third.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -9,6 +12,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        "/MyApp": (BuildContext context) => MyApp(),
+        "/LogoApp": (BuildContext context) => LogoApp(),
+        "/ThirdApp": (BuildContext context) => MyStatefulWidget(),
+      },
     );
   }
 }
@@ -66,6 +74,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             child: Container(color: Colors.green),
           ),
         ),
+      ),
+      floatingActionButton: Column(
+          mainAxisAlignment:MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed("/LogoApp");
+            },
+            child: Icon(Icons.arrow_left),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed("/ThirdApp");
+            },
+            child: Icon(Icons.arrow_right),
+          )
+        ],
       ),
       // body: /*Center(*/
       //   /*child:*/ Column(
