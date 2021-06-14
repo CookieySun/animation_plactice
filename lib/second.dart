@@ -1,112 +1,88 @@
-import 'package:animation_plactice/third.dart';
 import 'package:flutter/material.dart';
 
-import 'main.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: {
-        "/MyApp": (BuildContext context) => MyApp(),
-        "/LogoApp": (BuildContext context) => LogoApp(),
-        "/ThirdApp": (BuildContext context) => MyStatefulWidget(),
-      },
-    );
-  }
+class LogoApp extends StatefulWidget {
+  _LogoAppState createState() => _LogoAppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
-  final String? title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  static final _opacityTween = Tween<double>(begin: 0.1, end: 1);
-  static final _sizeTween = Tween<double>(begin: 0, end: 300);
+class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController controller;
+  late Animation<double> sizeAnimation;
+  late Animation<double> opacityAnimation;
 
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1))
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              _animationController.reverse();
-            } else if (status == AnimationStatus.dismissed) {
-              _animationController.forward();
-            }
-          });
+    controller =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    sizeAnimation = Tween<double>(begin: 0, end: 300).animate(controller);
+    opacityAnimation = Tween<double>(begin: 0.1, end: 1).animate(controller);
+    animation = Tween<double>(
+      begin: 0,
+      end: 300,
+    ).animate(controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      });
 
-    _animationController.forward();
+    controller.forward();
   }
+
+  @override
+  Widget build(BuildContext context) => GrowTransition(
+        child: LogoWidget(),
+        animation: animation,
+      );
 
   @override
   void dispose() {
-    _animationController.dispose();
+    controller.dispose();
     super.dispose();
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
-      ),
-      body: SizeTransition(
-        sizeFactor: _animationController,
-        axisAlignment: -1,
-        axis: Axis.horizontal,
-        child: Center(
-          child: SizedBox(
-            width: 50,
-            height: 50,
-            child: Container(color: Colors.green),
+class GrowTransition extends StatelessWidget {
+  GrowTransition({required this.child, required this.animation});
+
+  final Widget child;
+  final Animation<double> animation;
+
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: AnimatedBuilder(
+            animation: animation,
+            builder: (context, child) => Container(
+              height: animation.value,
+              width: animation.value,
+              child: child,
+            ),
+            child: child,
           ),
         ),
-      ),
-      floatingActionButton: Column(
-          mainAxisAlignment:MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed("/LogoApp");
-            },
-            child: Icon(Icons.arrow_left),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed("/ThirdApp");
-            },
-            child: Icon(Icons.arrow_right),
-          )
-        ],
-      ),
-      // body: /*Center(*/
-      //   /*child:*/ Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //   /*child:*/ SizeTransition(
-      //     sizeFactor: _animationController,
-      //     child: Center(
-      //         child: SizedBox(
-      //             width: 50,
-      //             height: 50,
-      //             child: Container(color: Colors.green))),
-      //   ),
-      //     ],
-      //   ),
-      // ),
-    );
-  }
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/ThirdApp");
+              },
+              child: Icon(Icons.arrow_left),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/MyApp");
+              },
+              child: Icon(Icons.arrow_right),
+            ),
+          ],
+        ),
+      );
+}
+
+class LogoWidget extends StatelessWidget {
+  Widget build(BuildContext context) => FlutterLogo();
 }
