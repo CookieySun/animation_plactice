@@ -1,6 +1,7 @@
+import 'package:animation_plactice/second.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(LogoApp());
+void main() => runApp(MyApp());
 
 // class AnimatedLogo extends AnimatedWidget {
 //   // Make the Tweens static because they don't change.
@@ -132,17 +133,36 @@ class GrowTransition extends StatelessWidget {
   final Widget child;
   final Animation<double> animation;
 
-  Widget build(BuildContext context) => Center(
-        child: AnimatedBuilder(
-          animation: animation,
-          builder: (context, child) => Container(
-            height: animation.value,
-            width: animation.value,
+  Widget build(BuildContext context) => Scaffold(
+    body: Center(
+          child: AnimatedBuilder(
+            animation: animation,
+            builder: (context, child) => Container(
+              height: animation.value,
+              width: animation.value,
+              child: child,
+            ),
             child: child,
           ),
-          child: child,
         ),
-      );
+    floatingActionButton: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed("/ThirdApp");
+          },
+          child: Icon(Icons.arrow_left),
+        ),
+        FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed("/MyApp");
+          },
+          child: Icon(Icons.arrow_right),
+        ),
+      ],
+    ),
+  );
 }
 
 class LogoWidget extends StatelessWidget {
